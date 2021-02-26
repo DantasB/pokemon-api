@@ -13,9 +13,10 @@ class Pokemon():
         pokemons = []
         for pokemon in json:
             try:
-                pokemons.append(Pokemon(pokemon.name, pokemon.abilities, pokemon.weakness, pokemon.number, pokemon.height, pokemon.ThumbnailImage, pokemon.type))
+                pokemons.append(Pokemon(pokemon['name'], pokemon['abilities'], pokemon['weakness'], pokemon['number'], pokemon['height'], pokemon['ThumbnailImage'], pokemon['type']))
             except:
                 raise
-            
+        
+        print("Success")
         return pokemons
     

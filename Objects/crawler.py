@@ -10,10 +10,8 @@ class PokemonCrawler():
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.get(url, headers=self.headers, proxy=self.proxy, timeout=self.timeout) as response:
-                    print (response.status)
                     if response.status == 200:
                         json_content = await response.read()
-                        print(json_content)
                         return json_content
             except:
                 raise
@@ -23,7 +21,6 @@ class PokemonCrawler():
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.get(url, headers=self.headers, proxy=self.proxy, timeout=self.timeout) as response:
-                    print (response.status)
                     if response.status == 200:
                         html_content = await response.read()
                         return html_content
