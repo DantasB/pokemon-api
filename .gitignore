@@ -147,3 +147,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 virtual_env/lib64
+.env
+.env.example
+.env.local
+.env.staging
