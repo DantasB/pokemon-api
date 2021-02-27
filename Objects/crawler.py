@@ -28,3 +28,11 @@ class PokemonCrawler():
             except:
                 raise
             return ""
+
+    def get_pokemon_list(self, loop, get_pokemon_json, fill_object_with_json, json):
+        pokemon_json = loop.run_until_complete(get_pokemon_json("https://www.pokemon.com/br/api/pokedex/kalos"))
+        pokemon_list = fill_object_with_json(json.loads(pokemon_json.decode()))
+        return pokemon_list
+
+    def get_second_html(self, loop, get_pokemon_page, url):
+        return loop.run_until_complete(get_pokemon_page(url))
