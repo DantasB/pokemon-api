@@ -1,5 +1,6 @@
 import aiohttp
 
+
 class PokemonCrawler():
     def __init__(self, proxy=None, timeout=120, headers=None):
         self.proxy   = proxy
@@ -27,4 +28,3 @@ class PokemonCrawler():
             except:
                 raise
             return ""
-
