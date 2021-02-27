@@ -57,7 +57,7 @@ class Pokemon():
                 "ImageUrl": self.image_url}
 
     def __eq__(self, other_pokemon):
-        if(self.number == other_pokemon.number):
+        if(self.national_number == other_pokemon.national_number):
             return True
         return False
 
