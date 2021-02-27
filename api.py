@@ -1,7 +1,8 @@
 import asyncio
 import json
-from flask import Flask, jsonify, Response
-from SharedLibrary import *
+from flask import Flask, Response
+from SharedLibrary.parser import *
+from SharedLibrary.utils import *
 from Objects.crawler import *
 from Objects.pokemon import *
 
@@ -11,15 +12,25 @@ loop = asyncio.get_event_loop()
 
 
 @app.route('/')
-def hello():
+def get_all_pokemons():
     pokemon_list = PokemonCrawler().get_pokemon_list(loop, PokemonCrawler().get_pokemon_json, Pokemon.fill_object_with_json, json)
     for pokemon in pokemon_list:
-        parser.get_extra_informations(pokemon, PokemonCrawler().get_second_html(loop, PokemonCrawler().get_pokemon_json, "https://pokemondb.net/pokedex/" + pokemon.name))
+        get_extra_informations(pokemon, PokemonCrawler().get_second_html(loop, PokemonCrawler().get_pokemon_json, "https://pokemondb.net/pokedex/" + pokemon.name))
         
         print(f"[Debug] All informations and extra informations for {pokemon.name} were captured")
+    return change_pokemons_to_utf8(Response, json, pokemon_list)
 
-        return utils.change_response_to_utf8(Response, json, pokemon)
+@app.route('/<pokemon_name>')
+def get_single_pokemon(pokemon_name):
+    pokemon_list = PokemonCrawler().get_pokemon_list(loop, PokemonCrawler().get_pokemon_json, Pokemon.fill_object_with_json, json)
+    for pokemon in pokemon_list:
+        if(pokemon.name.lower() != pokemon_name.lower()):
+            continue
 
+        get_extra_informations(pokemon, PokemonCrawler().get_second_html(loop, PokemonCrawler().get_pokemon_json, "https://pokemondb.net/pokedex/" + pokemon.name))
+        
+        print(f"[Debug] All informations and extra informations for {pokemon.name} were captured")
+        return change_pokemon_to_utf8(Response, json, pokemon)
 
 if __name__ == "__main__":
     app.run(debug=True)
