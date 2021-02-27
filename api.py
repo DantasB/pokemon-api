@@ -1,36 +1,39 @@
 import asyncio
 import json
-from flask import Flask, jsonify, Response
-from SharedLibrary import *
-from Objects import *
+from flask import Flask, Response, jsonify
+from SharedLibrary.parser import *
+from SharedLibrary.utils import *
+from Objects.crawler import *
+from Objects.pokemon import *
 
 app = Flask(__name__)
 
 loop = asyncio.get_event_loop()
 
-def get_pokemon_list():
-    pokemon_json = loop.run_until_complete(crawler.PokemonCrawler().get_pokemon_json("https://www.pokemon.com/br/api/pokedex/kalos"))
-    pokemon_list = pokemon.Pokemon.fill_object_with_json(json.loads(pokemon_json.decode()))
-    return pokemon_list
-
-def change_response_to_utf8(pokemon):
-    json_string = json.dumps(pokemon.serialize(), ensure_ascii=False)
-    response    = Response(json_string, content_type="application/json; charset=utf-8")
-    return response
-
-def parse_extra_information(pokemon):
-        pokemon_html = loop.run_until_complete(crawler.PokemonCrawler().get_pokemon_page("https://pokemondb.net/pokedex/" + pokemon.name))
-        parser.get_extra_informations(pokemon, pokemon_html)
 
 @app.route('/')
-def hello():
-    pokemon_list = get_pokemon_list()
+def get_all_pokemons():
+    pokemon_list = PokemonCrawler().get_pokemon_list(loop, PokemonCrawler().get_pokemon_json, Pokemon.fill_object_with_json, json)
+    pokemon_data = []
     for pokemon in pokemon_list:
-        parse_extra_information(pokemon)
+        if(pokemon not in pokemon_data):
+            get_extra_informations(pokemon, PokemonCrawler().get_second_html(loop, PokemonCrawler().get_pokemon_json, "https://pokemondb.net/pokedex/" + pokemon.name))
+            print(f"[Debug] All informations and extra informations for {pokemon.name} were captured")
+            pokemon_data.append(pokemon)
+    
+    return change_pokemons_to_utf8(Pokemon, Response, jsonify, pokemon_data)
+
+@app.route('/<pokemon_name>')
+def get_single_pokemon(pokemon_name):
+    pokemon_list = PokemonCrawler().get_pokemon_list(loop, PokemonCrawler().get_pokemon_json, Pokemon.fill_object_with_json, json)
+    for pokemon in pokemon_list:
+        if(pokemon.name.lower() != pokemon_name.lower()):
+            continue
+
+        get_extra_informations(pokemon, PokemonCrawler().get_second_html(loop, PokemonCrawler().get_pokemon_json, "https://pokemondb.net/pokedex/" + pokemon.name))
+        
         print(f"[Debug] All informations and extra informations for {pokemon.name} were captured")
-
-        return change_response_to_utf8(pokemon)
-
+        return change_pokemon_to_utf8(Response, json, pokemon)
 
 if __name__ == "__main__":
     app.run(debug=True)

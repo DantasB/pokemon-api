@@ -54,7 +54,10 @@ def get_pokemon_species(pokemon, information):
     pokemon.set_species(species)
 
 def get_pokemon_local_numbers(pokemon, informations):
-    informations = utils.remove_html_tags(informations).strip().split(')')
+    informations = utils.remove_html_tags(informations)
+    if(informations is None):
+        return
+    informations = informations.strip().split(')')
     informations = informations[:len(informations)-1]
     for information in informations:
         information = information.split('(')
