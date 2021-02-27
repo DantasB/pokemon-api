@@ -16,10 +16,9 @@ def change_pokemon_to_utf8(Response, json, pokemon):
     response    = Response(json_string, content_type="application/json; charset=utf-8")
     return response   
 
-def change_pokemons_to_utf8(Response, json, pokemons):
+def change_pokemons_to_utf8(Pokemon, Response, jsonify, pokemons):
     result = []
     for pokemon in pokemons:
-        json_string = json.dumps(pokemon.serialize(), ensure_ascii=False)
-        response    = Response(json_string, content_type="application/json; charset=utf-8")
-        result.append(response)
-    return {result}   
+            result.append(pokemon.serialize())
+
+    return jsonify(result)
