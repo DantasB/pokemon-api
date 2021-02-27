@@ -35,8 +35,17 @@ def get_pokemon_base_stats(pokemon, informations):
 
 def get_pokemon_pokedex_entries(pokemon, informations):
     for information in informations:
-        information = utils.remove_html_tags(information).strip().split(" ", 1)
-        pokemon.set_pokedex_entries(information[0], information[1])
+        splitted_information = information.split("</span>")
+
+        text = utils.remove_html_tags(splitted_information[-1]).strip()
+
+        if len(splitted_information) == 2:
+            pokemon.set_pokedex_entries(utils.remove_html_tags(splitted_information[0]).strip(), text)
+            continue
+
+        games = splitted_information[:len(splitted_information)-1]
+        for game in games:
+            pokemon.set_pokedex_entries(utils.remove_html_tags(game).strip(), text)
 
 def get_pokemon_species(pokemon, information):
     if information is None:
