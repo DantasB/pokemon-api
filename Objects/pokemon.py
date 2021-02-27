@@ -24,9 +24,9 @@ class Pokemon():
         if((key is not None)and (stats is not None)):
             self.max_stats[key] = stats
 
-    def set_pokedex_entries(self, pokedex_entries):
-        if(pokedex_entries is not None):
-            self.pokedex_entries = pokedex_entries    
+    def set_pokedex_entries(self, game, text):
+        if((game is not None) and (text is not None)):
+            self.pokedex_entries[game] = text
 
     def __eq__(self, other_pokemon):
         if(self.number == other_pokemon.number):
@@ -44,6 +44,6 @@ class Pokemon():
                 pokemons.append(cls(pokemon['name'], pokemon['abilities'], pokemon['weakness'], pokemon['number'], pokemon['height'], pokemon['ThumbnailImage'], pokemon['type']))
             except:
                 raise
-        print("Success")
+        print("All Pokemons are now Objects")
         return pokemons
     
