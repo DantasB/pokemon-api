@@ -1,6 +1,6 @@
 import asyncio
 import json
-from flask import Flask, Response
+from flask import Flask, Response, jsonify
 from SharedLibrary.parser import *
 from SharedLibrary.utils import *
 from Objects.crawler import *
@@ -14,11 +14,14 @@ loop = asyncio.get_event_loop()
 @app.route('/')
 def get_all_pokemons():
     pokemon_list = PokemonCrawler().get_pokemon_list(loop, PokemonCrawler().get_pokemon_json, Pokemon.fill_object_with_json, json)
+    pokemon_data = []
     for pokemon in pokemon_list:
-        get_extra_informations(pokemon, PokemonCrawler().get_second_html(loop, PokemonCrawler().get_pokemon_json, "https://pokemondb.net/pokedex/" + pokemon.name))
-        
-        print(f"[Debug] All informations and extra informations for {pokemon.name} were captured")
-    return change_pokemons_to_utf8(Response, json, pokemon_list)
+        if(pokemon not in pokemon_data):
+            get_extra_informations(pokemon, PokemonCrawler().get_second_html(loop, PokemonCrawler().get_pokemon_json, "https://pokemondb.net/pokedex/" + pokemon.name))
+            print(f"[Debug] All informations and extra informations for {pokemon.name} were captured")
+            pokemon_data.append(pokemon)
+    
+    return change_pokemons_to_utf8(Pokemon, Response, jsonify, pokemon_data)
 
 @app.route('/<pokemon_name>')
 def get_single_pokemon(pokemon_name):
