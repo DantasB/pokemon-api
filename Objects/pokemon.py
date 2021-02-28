@@ -1,6 +1,18 @@
 import json
 
 class Pokemon():
+    """
+    The object Pokemon relates to all pokemon basics information.
+
+    Args:
+        name (str): pokemon name
+        abilities (list): list of pokemon abilities
+        weakness (list): list of pokemon weakness
+        national_number (int): number that acts like a pokemon id
+        height (float): pokemon height
+        image_url (str): pokemon image url
+        types (list): list of pokemon types
+    """
 
     def __init__(self, name, abilities, weakness, national_number, height, image_url, types):
         self.name            = name
@@ -42,6 +54,11 @@ class Pokemon():
             self.local_numbers[game] = number
     
     def serialize(self):
+        """ We need to serialize the object before send it throught the api
+
+        Returns:
+            dictionary: the pokemon object serialized
+        """
         return {"Name": self.name,
                 "NationalNumber": self.national_number,
                 "LocalNumber": self.local_numbers,
@@ -57,6 +74,14 @@ class Pokemon():
                 "ImageUrl": self.image_url}
 
     def __eq__(self, other_pokemon):
+        """ Instantiate an eq method that compares the pokemons national_number
+
+        Args:
+            other_pokemon (Pokemon) the pokemon object to be compared
+
+        Returns:
+            bool: return True if both pokemons have the same national_number
+        """
         if(self.national_number == other_pokemon.national_number):
             return True
         return False
@@ -66,6 +91,14 @@ class Pokemon():
 
     @classmethod
     def fill_object_with_json(cls, json):
+        """ A classmethod that generates Pokemon objects with the json informations
+
+        Args:
+            json (dictionary): a json that contains some pokemon informations
+
+        Returns:
+            list: a list containing Pokemon objects
+        """
         pokemons = []
         for pokemon in json:
             try:

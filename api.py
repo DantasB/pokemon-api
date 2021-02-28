@@ -13,6 +13,11 @@ loop = asyncio.get_event_loop()
 
 @app.route('/')
 def get_all_pokemons():
+    """ This route receives no parameter, so it will return every pokemon information founded
+
+    Returns:
+        dictionary: a dictionary containing all the pokemons informations
+    """
     pokemon_list = PokemonCrawler().get_pokemon_list(loop, PokemonCrawler().get_pokemon_json, Pokemon.fill_object_with_json, json)
     pokemon_data = []
     for pokemon in pokemon_list:
@@ -21,10 +26,18 @@ def get_all_pokemons():
             print(f"[Debug] All informations and extra informations for {pokemon.name} were captured")
             pokemon_data.append(pokemon)
     
-    return change_pokemons_to_utf8(Pokemon, Response, jsonify, pokemon_data)
+    return change_pokemons_to_utf8(jsonify, pokemon_data)
 
 @app.route('/<pokemon_name>')
 def get_single_pokemon(pokemon_name):
+    """ This route receives no parameter, so it will return every pokemon information founded
+
+    Args:
+        pokemon_name (string): the pokemon to have the information returned
+
+    Returns:
+        dictionary: a dictionary containing the pokemon_name information
+    """
     pokemon_list = PokemonCrawler().get_pokemon_list(loop, PokemonCrawler().get_pokemon_json, Pokemon.fill_object_with_json, json)
     for pokemon in pokemon_list:
         if(pokemon.name.lower() != pokemon_name.lower()):
