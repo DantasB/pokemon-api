@@ -12,8 +12,8 @@ The Pokemon is actually offline, but you can run this project in your machine.
 ### Setup
 Setting up the Pokemon API is a no-brainer, just follow the guide below:
 1. Download all the files.
-2. Install all the libraries located at the [requirements.txt](requirements.txt);
-4. Run the [api.py](https://github.com/DantasB/Pokemon-API/blob/main/api.py);
+2. Install all the libraries located at the [requirements.txt](requirements.txt).
+4. Run the [api.py](https://github.com/DantasB/Pokemon-API/blob/main/api.py).
 
 ### Routes
 - *'/':* This route gets every pokemon information (actually there are about 900, according the pokemon main page).
