@@ -16,8 +16,8 @@ Setting up the Pokemon API is a no-brainer, just follow the guide below:
 4. Run the [api.py](https://github.com/DantasB/Pokemon-API/blob/main/api.py);
 
 ### Routes
-- '/' this route gets every pokemon information (actually there are about 900, according the pokemon main page).
-- '/pokemon-name' this route, you need to pass a argument that's the pokemon name that you're looking for.
+- *'/':* This route gets every pokemon information (actually there are about 900, according the pokemon main page).
+- *'/<pokemon_name>':* This route, you need to pass a argument that's the pokemon name that you're looking for.
 
 
 ### Object
