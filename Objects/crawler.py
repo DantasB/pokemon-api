@@ -1,4 +1,5 @@
 import aiohttp
+from typing import Callable
 
 
 class PokemonCrawler():
@@ -6,16 +7,16 @@ class PokemonCrawler():
     The PokemonCrawler relates to all functions that access a pokemon website to get informations.
     """
 
-    def __init__(self, proxy=None, timeout=120, headers=None):
-        self.proxy   = proxy
+    def __init__(self, proxy: str = None, timeout: int = 120, headers: list = None) -> object:
+        self.proxy = proxy
         self.timeout = timeout
         self.headers = headers
 
-    async def get_content(self, url):
+    async def get_content(self, url: str) -> bytes:
         """ Gets the url html content if the status code is 200
 
         Args:
-            url (string): the url to be crawlled
+            url (str): the url to be crawlled
 
         Returns:
             bytes: the binary information containing the html content
@@ -30,7 +31,7 @@ class PokemonCrawler():
                 raise
             return ""
 
-    def get_pokemon_list(self, loop, get_content, fill_object_with_json, json):
+    def get_pokemon_list(self, loop: Callable, get_content: Callable, fill_object_with_json: Callable, json: object):
         """ An wrapper that gets the list of pokemon Objects filled with the json information
 
         Args:
@@ -42,17 +43,18 @@ class PokemonCrawler():
         Returns:
             list: a list containing Pokemon objects
         """
-        pokemon_json = loop.run_until_complete(get_content("https://www.pokemon.com/br/api/pokedex/kalos"))
+        pokemon_json = loop.run_until_complete(get_content(
+            "https://www.pokemon.com/br/api/pokedex/kalos"))
         pokemon_list = fill_object_with_json(json.loads(pokemon_json.decode()))
         return pokemon_list
 
-    def get_second_html(self, loop, get_content, url):
+    def get_second_html(self, loop: Callable, get_content: Callable, url: str) -> bytes:
         """ Access the url related to the specific pokemon
 
         Args:
             loop (object): asyncio object to run the async function
             get_content (function): function to access the url content
-            url (string): pokemon url
+            url (str): pokemon url
 
         Returns:
             bytes: the binary information containing the html content
