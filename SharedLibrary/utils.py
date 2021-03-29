@@ -1,33 +1,37 @@
 import re
+from typing import Callable
 
-def remove_html_tags(text):
+
+def remove_html_tags(text: str) -> str:
     """ Remove all html tags
 
     Args:
-        text (string): the content that will have the html tags removed
+        text (str): the content that will have the html tags removed
 
     Returns:
-        string: text withouth html tags
+        str: text withouth html tags
     """
     if(text is None):
         return
-    
-    clean = re.compile('<.*?>')
+
+    clean = re.compile(r'<.*?>')
     return re.sub(clean, '', text)
 
-def remove_all_line_breakers(text):
+
+def remove_all_line_breakers(text: str) -> str:
     """ Remove all line breakers
 
     Args:
-        text (string): the content that will have the line breakers removed
+        text (str): the content that will have the line breakers removed
 
     Returns:
-        string: text withouth line breakers
+        str: text withouth line breakers
     """
-    clean = re.compile("\s+")
+    clean = re.compile(r"\s+")
     return re.sub(clean, ' ', text)
 
-def change_pokemon_to_utf8(Response, json, pokemon):
+
+def change_pokemon_to_utf8(Response: Callable, json: object, pokemon: object):
     """ Gets the pokemon object and changes it to utf-8
 
     Args:
@@ -36,13 +40,15 @@ def change_pokemon_to_utf8(Response, json, pokemon):
         pokemon (object): the pokemon that will have the information serialized
 
     Returns:
-        response: [description]
+        response: the pokemon response
     """
     json_string = json.dumps(pokemon.serialize(), ensure_ascii=False)
-    response    = Response(json_string, content_type="application/json; charset=utf-8")
-    return response   
+    response = Response(
+        json_string, content_type="application/json; charset=utf-8")
+    return response
 
-def change_pokemons_to_utf8(jsonify, pokemons):
+
+def change_pokemons_to_utf8(jsonify: Callable, pokemons: list) -> dict:
     """ Gets the pokemons list and changes it to a serialized object
 
     Args:
@@ -50,10 +56,10 @@ def change_pokemons_to_utf8(jsonify, pokemons):
         pokemons (list): the pokemons that will have the information serialized
 
     Returns:
-        dictionary: a dictionary containing all the serialized information
+        dict: a dictionary containing all the serialized information
     """
     result = []
     for pokemon in pokemons:
-            result.append(pokemon.serialize())
+        result.append(pokemon.serialize())
 
     return jsonify(result)
